@@ -38,5 +38,14 @@
             var actual = HtmlTweaker.Default(source);
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void ChangesImgSource()
+        {
+            const string source = @"<html><head></head><body><img src=""/images/default-source/foo.png""></body></html>";
+            const string expected = @"<html><head></head><body><img src=""http://my.cdn.com/media/foo.png""></body></html>";
+            var actual = HtmlTweaker.Default(source);
+            Assert.Equal(expected, actual);
+        }
     }
 }

@@ -34,6 +34,7 @@
       <HintPath>..\packages\CsQuery.1.3.4\lib\net40\CsQuery.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -43,10 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CssLinkShift.cs" />
     <Compile Include="DefaultTweaker.cs" />
     <Compile Include="FilterStream.cs" />
     <Compile Include="HtmlTweaker.cs" />
+    <Compile Include="ImagesFromCdn.cs" />
+    <Compile Include="ITweak.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptShift.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

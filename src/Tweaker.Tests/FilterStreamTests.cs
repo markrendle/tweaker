@@ -16,6 +16,7 @@
                     const string html = "<html></html>";
                     var bytes = Encoding.UTF8.GetBytes(html);
                     target.Write(bytes, 0, bytes.Length);
+                    target.Flush();
                     wrapped.Position = 0;
                     Assert.Equal(html, Encoding.UTF8.GetString(wrapped.ToArray()));
                 }
@@ -34,6 +35,7 @@
                     target.Write(bytes, 0, bytes.Length);
                     bytes = Encoding.UTF8.GetBytes(html.Substring(10));
                     target.Write(bytes, 0, bytes.Length);
+                    target.Flush();
                     wrapped.Position = 0;
                     Assert.Equal(html, Encoding.UTF8.GetString(wrapped.ToArray()));
                 }

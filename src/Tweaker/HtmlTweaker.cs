@@ -1,4 +1,6 @@
-﻿namespace Tweaker
+﻿using System.Collections.Generic;
+
+namespace Tweaker
 {
     using System;
     using System.Linq;
@@ -7,9 +9,9 @@
     public class HtmlTweaker
     {
         private readonly Action<CQ> _action;
-        private static readonly HtmlTweaker DefaultInstance = new HtmlTweaker(ScriptShift, CssLinkShift);
+        private static readonly HtmlTweaker DefaultInstance = ConstructDefault();
 
-        public HtmlTweaker(params Action<CQ>[] actions)
+        public HtmlTweaker(IEnumerable<Action<CQ>> actions)
         {
             _action = (Action<CQ>)Delegate.Combine(actions.Cast<Delegate>().ToArray());
         }
@@ -28,30 +30,15 @@
             return DefaultInstance.Transform(html);
         }
 
-        public static void ScriptShift(CQ doc)
+        private static HtmlTweaker ConstructDefault()
         {
-            var scripts = doc["script:not([data-pin])"].ToArray();
-            if (scripts.Length == 0) return;
-
-            var body = doc["body"].First();
-
-            foreach (var script in scripts)
+            var actions = new List<Action<CQ>> { new ScriptShift().Run, new CssLinkShift().Run };
+            var imagesFromCdn = ImagesFromCdn.TryCreateFromAppSettings();
+            if (imagesFromCdn != null)
             {
-                body.Append(script);
+                actions.Add(imagesFromCdn.Run);
             }
-        }
-
-        public static void CssLinkShift(CQ doc)
-        {
-            var cssLinks = doc["link[rel='stylesheet']"].ToArray();
-            if (cssLinks.Length < 2) return;
-
-            var parent = cssLinks[0].ParentNode;
-
-            for (int i = 1; i < cssLinks.Length; i++)
-            {
-                parent.InsertAfter(cssLinks[i],cssLinks[i-1]);
-            }
+            return new HtmlTweaker(actions);
         }
     }
 }

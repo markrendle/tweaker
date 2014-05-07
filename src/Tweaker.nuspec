@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Tweaker</id>
+    <version>0.2</version>
+    <authors>Mark Rendle</authors>
+    <owners>Mark Rendle</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://github.com/markrendle/Tweaker</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>HTML field surgery.</description>
+    <summary>An ASP.NET module to fix the horrible HTML that some things generate.</summary>
+    <copyright>Mark Rendle</copyright>
+    <tags>asp.net</tags>
+    <dependencies>
+      <dependency id="CsQuery" version="1.3.4" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Tweaker\bin\Release\Tweaker.dll" target="lib\net40" />
+  </files>
+</package>

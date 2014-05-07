@@ -16,7 +16,9 @@
 
         public string Transform(string html)
         {
+            if (string.IsNullOrWhiteSpace(html)) return html;
             var doc = CQ.Create(html);
+            if (doc["body"].Length == 0) return html;
             _action(doc);
             return doc.Render();
         }

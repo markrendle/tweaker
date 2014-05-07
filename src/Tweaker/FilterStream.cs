@@ -47,6 +47,8 @@ namespace Tweaker
 
         public override void Flush()
         {
+            var output = Encoding.UTF8.GetBytes(_filter(_html.ToString()));
+            _responseStream.Write(output, 0, output.Length);
             _responseStream.Flush();
         }
 
@@ -69,45 +71,13 @@ namespace Tweaker
         {
             var html = Encoding.UTF8.GetString(buffer, offset, count);
             _html.Append(html);
-            if (!Eof(html))
-            {
-                return;
-            }
-
-            var output = Encoding.UTF8.GetBytes(_filter(_html.ToString()));
-
-            _responseStream.Write(output, 0, output.Length);
         }
 
         public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             var html = Encoding.UTF8.GetString(buffer, offset, count);
             _html.Append(html);
-            if (!Eof(html))
-            {
-                return Completed.Task;
-            }
-
-            var output = Encoding.UTF8.GetBytes(_filter(_html.ToString()));
-
-            return _responseStream.WriteAsync(output, 0, output.Length, cancellationToken);
-        }
-
-        private bool Eof(string html)
-        {
-            if (html.Length < 10)
-            {
-                if (EofRegex.IsMatch(_html.ToString()))
-                {
-                    return true;
-                }
-            }
-            else if (EofRegex.IsMatch(html))
-            {
-                return true;
-            }
-
-            return false;
+            return Completed.Task;
         }
 
         protected override void Dispose(bool disposing)

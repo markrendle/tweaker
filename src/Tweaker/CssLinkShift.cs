@@ -3,18 +3,20 @@ using CsQuery;
 
 namespace Tweaker
 {
+    using System.Diagnostics;
+
     public class CssLinkShift : ITweak
     {
         public void Run(CQ doc)
         {
-            var cssLinks = doc["link[rel='stylesheet']"].ToArray();
-            if (cssLinks.Length < 2) return;
-
-            var parent = cssLinks[0].ParentNode;
-
-            for (int i = 1; i < cssLinks.Length; i++)
+            try
             {
-                parent.InsertAfter(cssLinks[i],cssLinks[i-1]);
+                var first = doc["head"]["link[rel='stylesheet'],style"].First();
+                doc["link[rel='stylesheet'],style"].Slice(1).InsertAfter(first);
+            }
+            catch (System.Exception ex)
+            {
+                Trace.TraceError(ex.Message);
             }
         }
     }

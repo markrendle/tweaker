@@ -40,6 +40,24 @@
         }
 
         [Fact]
+        public void MaintainsLinkAndScriptOrder()
+        {
+            const string source = @"<html><head><link rel=""stylesheet"" href=""a.css""><style>body {padding-top:60px}</style><script data-pin src=""html5shiv.js""></script><link rel=""stylesheet"" href=""b.css""></head><body><h1>Hello</h1></body></html>";
+            const string expected = @"<html><head><link rel=""stylesheet"" href=""a.css""><style>body {padding-top:60px}</style><link rel=""stylesheet"" href=""b.css""><script data-pin src=""html5shiv.js""></script></head><body><h1>Hello</h1></body></html>";
+            var actual = HtmlTweaker.Default(source);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void MovesStyleTagsFromBodyToHead()
+        {
+            const string source = @"<html><head><link rel=""stylesheet"" href=""a.css""><style>body {padding-top:60px}</style><script data-pin src=""html5shiv.js""></script><link rel=""stylesheet"" href=""b.css""></head><body><style>.foo {color: red}</style><h1>Hello</h1><style>.bar {color: blue}</style></body></html>";
+            const string expected = @"<html><head><link rel=""stylesheet"" href=""a.css""><style>body {padding-top:60px}</style><link rel=""stylesheet"" href=""b.css""><style>.foo {color: red}</style><style>.bar {color: blue}</style><script data-pin src=""html5shiv.js""></script></head><body><h1>Hello</h1></body></html>";
+            var actual = HtmlTweaker.Default(source);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
         public void ChangesImgSource()
         {
             const string source = @"<html><head></head><body><img src=""/images/default-source/foo.png""></body></html>";

@@ -3,18 +3,19 @@ using CsQuery;
 
 namespace Tweaker
 {
+    using System.Diagnostics;
+
     public class ScriptShift : ITweak
     {
         public void Run(CQ doc)
         {
-            var scripts = doc["script:not([data-pin])"].ToArray();
-            if (scripts.Length == 0) return;
-
-            var body = doc["body"].First();
-
-            foreach (var script in scripts)
+            try
             {
-                body.Append(script);
+                doc["script:not([data-pin])"].AppendTo(doc["body"]);
+            }
+            catch (System.Exception ex)
+            {
+                Trace.TraceError(ex.Message);
             }
         }
     }

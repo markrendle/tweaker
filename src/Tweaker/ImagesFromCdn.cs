@@ -4,6 +4,8 @@ using CsQuery;
 
 namespace Tweaker
 {
+    using System.Diagnostics;
+
     public class ImagesFromCdn : ITweak
     {
         private const string CdnImagePatternKey = "tweaker:CdnImgRegex";
@@ -19,11 +21,18 @@ namespace Tweaker
 
         public void Run(CQ doc)
         {
-            doc["img"].Each(img =>
+            try
             {
-                var src = img.GetAttribute("src");
-                img.SetAttribute("src", _srcRegex.Replace(src, _cdnBase));
-            });
+                doc["img"].Each(img =>
+                {
+                    var src = img.GetAttribute("src");
+                    img.SetAttribute("src", _srcRegex.Replace(src, _cdnBase));
+                });
+            }
+            catch (System.Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+            }
         }
 
         public static ImagesFromCdn TryCreateFromAppSettings()
